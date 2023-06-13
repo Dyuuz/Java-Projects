@@ -1,13 +1,10 @@
 import java.awt.Component;
 import java.util.Random;
-import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 public class Guess_Game {
 	private static final Component frame = null;
-	private static Scanner scan;
 	public static void main(String []args) {
-		scan = new Scanner(System.in);
 		
 //		Object to generate random numbers for computer
 		Random rand = new Random();
