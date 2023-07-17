@@ -19,7 +19,7 @@ public class Guess_Game {
 //		Welcome Dialog Message
 		String gg = "Welcome to Guess Game (:";
 		Object [] wlc = {"Start"};
-		JOptionPane.showOptionDialog(frame, ""+gg, "Guess Game Result Page", JOptionPane.YES_OPTION,
+		JOptionPane.showOptionDialog(frame, ""+gg, "Guess Game Welcome Page", JOptionPane.YES_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, wlc, wlc[0]);
 		String stp = "You will be asked to guess a number "
 				+ "that this computer is presently thinking about which ranges "
