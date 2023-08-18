@@ -85,7 +85,40 @@ public class TextEditorApp {
 		AboutApp.setToolTipText("Explore About App");
 		
 //		Defining Popup functionalities
-		
+		Cutt.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent edit) {
+			try {
+				editpane.cut();
+			}
+			catch(Exception e1){
+				JOptionPane.showMessageDialog(Frame , e1 , 
+						"Cut Function Error" ,JOptionPane.WARNING_MESSAGE);
+			}
+				
+			}
+		});
+		Copyy.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent edit) {
+				try {
+				editpane.copy();
+			}
+				catch(Exception e2){
+					JOptionPane.showMessageDialog(Frame , e2 , 
+							"Copy Function Error" ,JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		Paste.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent edit) {
+				try {
+				editpane.paste();
+			}
+				catch(Exception e3){
+					JOptionPane.showMessageDialog(Frame , e3 ,
+							"Paste Function Error" ,JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
 		
 		
 //		Defining File Menu items functionalities
