@@ -11,17 +11,18 @@ public class TextEditorApp {
 		
 //		Java swing component initialization and definition
 		JFrame Frame = new JFrame();
-		Frame.setTitle("Text Editor App");
+		String s = "*Untitled";
+		Frame.setTitle(s + " - Text Editor App");
 		JMenuBar Menu = new JMenuBar();
 		Menu.setBounds(0, 0,100,100);
 		JMenu File = new JMenu("File");
 		JMenu Edit = new JMenu("Edit");
 		JMenu About = new JMenu("About");
-		JMenuItem New = new JMenuItem("New");
-		JMenuItem Open = new JMenuItem("Open");
-		JMenuItem Save = new JMenuItem("Save");
-		JMenuItem Print = new JMenuItem("Print");
-		JMenuItem Save_Sub  = new JMenuItem("Save and Submit");
+		JMenuItem New = new JMenuItem(" New");
+		JMenuItem Open = new JMenuItem(" Open");
+		JMenuItem Save = new JMenuItem(" Save");
+		JMenuItem Print = new JMenuItem(" Print");
+		JMenuItem Save_Sub  = new JMenuItem(" Save and Submit");
 		JMenuItem Cut = new JMenuItem("Cut");
 		JMenuItem Copy = new JMenuItem("Copy");
 		JMenuItem Paste = new JMenuItem("Paste");
@@ -83,15 +84,20 @@ public class TextEditorApp {
 		
 		AboutApp.setToolTipText("Explore About App");
 		
+//		Defining Popup functionalities
+		
+		
+		
 //		Defining File Menu items functionalities
 		New.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
 					try {
 						editpane.setText("");
+						Frame.setTitle(s + " - Text Editor App");
 					}
 					catch(Exception e1){
 						JOptionPane.showMessageDialog(Frame , e1 , 
-								"Open File Function Error" ,JOptionPane.WARNING_MESSAGE);
+								"New File Function Error" ,JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});
@@ -121,7 +127,14 @@ public class TextEditorApp {
 				int openfile = file.showSaveDialog(Frame);
 				if (openfile == file.APPROVE_OPTION) {
 					try {
-						
+						File selFile = file.getSelectedFile();
+						selFile.createNewFile();
+//						JOptionPane.showMessageDialog(Frame, selFile.getAbsolutePath() );
+						FileWriter merge = new FileWriter(selFile.getAbsolutePath());
+						String str = editpane.getText();
+						merge.write(str);
+						merge.close();
+						Frame.setTitle(selFile.getName()+ " - Text Editor");
 						
 					}
 					catch(Exception e1){
