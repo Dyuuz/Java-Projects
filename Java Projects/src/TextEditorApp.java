@@ -1,9 +1,14 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.*;
 import java.io.*;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TextEditorApp {
 
@@ -33,16 +38,18 @@ public class TextEditorApp {
 		JMenuItem Cutt = new JMenuItem("Cut");
 		JMenuItem Copyy = new JMenuItem("Copy");
 		JMenuItem Pastee = new JMenuItem("Paste");
-		File selFile = new File("C:\\");
+//		File selFile = new File("C:\\");
 		JFileChooser file = new JFileChooser();
 		JEditorPane editpane = new JEditorPane();
+		editpane.setFont(new Font ("ComicSans", 0 ,13));
 		editpane.setContentType("text/plain");
-		editpane.setFont(new Font(null, Font.PLAIN, 12));
+//		editpane.setFont(new Font(null, Font.PLAIN, 12));
 		Frame.setContentPane(editpane);
 //		Frame.getContentPane().add(new JScrollPane(editpane), BorderLayout.NORTH);
 		
 //		Invoking/Calling swing functions
 		Frame.add(Menu);
+		Frame.add(Popup);
 		Menu.add(File);
 		Menu.add(Edit);
 		Menu.add(About);
@@ -62,6 +69,13 @@ public class TextEditorApp {
 		Popup.add(Copyy);
 		Popup.add(Pastee);
 		
+		
+		Popup.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e) {
+				Popup.show(Frame, e.getX(),e.getY());
+				
+			}
+		});
 //		Invoking Frame Methods
 		Frame.setJMenuBar(Menu);
 		Frame.setSize( 800, 800);
@@ -84,7 +98,7 @@ public class TextEditorApp {
 		
 		AboutApp.setToolTipText("Explore About App");
 		
-//		Defining Popup functionalities
+//		Defining Pop up functionalities
 		Cutt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent edit) {
 			try {
@@ -136,6 +150,8 @@ public class TextEditorApp {
 			});
 		Open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
+				file.setDialogTitle("Open a text file");
+				file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				int openfile = file.showOpenDialog(Frame);
 				if (openfile == file.APPROVE_OPTION) {
 					try {
@@ -157,17 +173,20 @@ public class TextEditorApp {
 			});
 		Save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
+				file.setDialogTitle("Save text file");
 				int openfile = file.showSaveDialog(Frame);
 				if (openfile == file.APPROVE_OPTION) {
 					try {
 						File selFile = file.getSelectedFile();
+						FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Doc", "txt");
+						file.setFileFilter(filter);
 						selFile.createNewFile();
-//						JOptionPane.showMessageDialog(Frame, selFile.getAbsolutePath() );
 						FileWriter merge = new FileWriter(selFile.getAbsolutePath());
 						String str = editpane.getText();
 						merge.write(str);
 						merge.close();
 						Frame.setTitle(selFile.getName()+ " - Text Editor");
+//						JOptionPane.showMessageDialog(Frame, selFile.getAbsolutePath() );
 						
 					}
 					catch(Exception e1){
@@ -251,8 +270,6 @@ public class TextEditorApp {
 					else{
 						
 					}
-					
-				
 				}
 					
 				catch(Exception e6){
