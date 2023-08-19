@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.*;
 import java.io.*;
 import javax.swing.JOptionPane;
@@ -16,6 +15,8 @@ public class TextEditorApp {
 		
 //		Java swing component initialization and definition
 		JFrame Frame = new JFrame();
+		Image icn = Toolkit.getDefaultToolkit().getImage("logo3.png");
+		Frame.setIconImage(icn);
 		String s = "*Untitled";
 		Frame.setTitle(s + " - Text Editor App");
 		JMenuBar Menu = new JMenuBar();
@@ -174,12 +175,13 @@ public class TextEditorApp {
 		Save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
 				file.setDialogTitle("Save text file");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Doc", "txt");
+				file.setFileFilter(filter);
 				int openfile = file.showSaveDialog(Frame);
 				if (openfile == file.APPROVE_OPTION) {
 					try {
 						File selFile = file.getSelectedFile();
-						FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Doc", "txt");
-						file.setFileFilter(filter);
+						
 						selFile.createNewFile();
 						FileWriter merge = new FileWriter(selFile.getAbsolutePath());
 						String str = editpane.getText();
@@ -260,10 +262,25 @@ public class TextEditorApp {
 		AboutApp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent about) {
 				try {
-					String AboutAppText = "Text Editor app is multi functional app";
+					ImageIcon img = new ImageIcon("logo3.png");
+					Image image = img.getImage();
+					Image scaledImg = image.getScaledInstance(200, 200, image.SCALE_DEFAULT);
+					Icon scaledIcon = new ImageIcon(scaledImg);
+					img.setImage(scaledImg);
+					JLabel lb = new JLabel("TEXT EDITOR");
+					lb.setFont(new Font ("ComicSans", Font.BOLD ,30));
+					String AboutApp = lb.getText();
+					
+					
+					String version = "1.0.12v";
+					
+					String AboutAppText = "Text Editor app is a free and miimal app for writing, offering a clean\n"
+							 		   +  "workspace and an open field for creativity. It provides basic features\n"
+							 		   +  "and modifications of existing text files.";
 					Object [] options = {"Send Feedback","Close"};
-					int opt = JOptionPane.showOptionDialog(Frame , AboutAppText ,
-							"About App",JOptionPane.YES_NO_OPTION ,JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+					int opt = JOptionPane.showOptionDialog(Frame , AboutApp +"\n"+ version
+							+ "\n" +AboutAppText ,"About App", 
+							JOptionPane.INFORMATION_MESSAGE, 0, scaledIcon, options, options[1]);
 					if (opt == JOptionPane.YES_OPTION ) {
 						
 					}

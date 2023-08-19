@@ -50,7 +50,7 @@ public class Guess_Game {
 			JOptionPane.showMessageDialog(null,"Names have been successfully saved.\nYou can now proceed to start game.");
 			
 //			Game Launches from here
-			for (int loop = 1; loop<= playturns; loop++) {
+			for (int loop = 1; loop <= playturns; loop++) {
 				String gn = loop % 2 != 1 ? ""+pTwo : ""+pOne;
 				String guessNum = JOptionPane.showInputDialog(frame, "Round " +loop + "\n"
 						+ "" +gn+ ", guess a number between 1-10.", "Input number" ,JOptionPane.QUESTION_MESSAGE);
