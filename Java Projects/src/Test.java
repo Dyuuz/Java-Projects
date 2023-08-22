@@ -1,41 +1,66 @@
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import javax.swing.JFrame;
+// Java Program to create a
+// simple progress bar
+import java.awt.*;
 import javax.swing.*;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import java.awt.event.*;
+import java.util.Random;
+public class Test extends JFrame {
 
-public class Test {
-  public static void main(String... args) {
-    JFrame frame = new JFrame();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    // create a frame
+    static JFrame f;
+    static JFrame f2;
+    static JProgressBar b;
+    static JOptionPane jOptionPane;
 
-    JPanel contentPane = new JPanel();
-//    contentPane.setLayout(new BorderLayout(100,100));
-    contentPane.setBounds(0, 0, 300, 300);
+    public static void main(String []args)
+    {
 
-    JTextArea tArea1 = new JTextArea();
-    tArea1.setLineWrap(true);
-    JTextArea tArea2 = new JTextArea();
-    contentPane.setBounds(0, 0, 300, 300);
+        // create a frame
+        f = new JFrame("ProgressBar demo");
+        JPanel p = new JPanel();
+        p.setSize(400,400);
+        b = new JProgressBar();
+        b.setBounds(400,400, 400,400);
+        JTextField btn = new JTextField("Yes");
+        b.setValue(0);
+        b.setStringPainted(true);
+        f.setContentPane(p);
+        p.add(b);
+      
+        
+        jOptionPane = new JOptionPane();
+//		jOptionPane.add(b);
 
-//    tArea2.setLineWrap(true);
-    tArea1.setText("I got a long long line of text in my JTextArea");
-//    tArea2.setText("I got a long long line of text in my JTextArea");
-    
-    JScrollPane scroller1 = new JScrollPane();
-//    JScrollPane scroller2 = new JScrollPane();
-    scroller1.setViewportView(tArea1);
-//    scroller2.setViewportView(tArea2);
+        f.setSize(800, 800);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        fill();
+        JOptionPane.showMessageDialog(f, p);
+    }
 
-    contentPane.add(scroller1);
-//    contentPane.add(scroller2);
-    frame.setContentPane(contentPane);
-//    frame.setContentPane(contentPane);
-    frame.setSize(900, 900);
-    frame.setLocationByPlatform(true);
-    frame.setVisible(true);
+    // function to increase progress
+    public static void fill()
+    {
+        int i = 0;
+        int n = 20;
+        Random rand = new Random();
+        try {
+            while (i <= 100) {
+                
+                b.setValue(i + 10);
 
-  }
+                // delay the thread
+                Thread.sleep(300);
+                n = 1+rand.nextInt(0,20);
+                i += n;
+ 
+            }
+        }
+        catch (Exception e) {
+        }
+        b.setVisible(true);
+        
+        
+    }
 }
