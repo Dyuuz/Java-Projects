@@ -44,18 +44,21 @@ public class TextEditorApp {
 		JMenuItem Copyy = new JMenuItem("Copy");
 		JMenuItem Pastee = new JMenuItem("Paste");
 		JMenuItem Selectall = new JMenuItem("SelectAll");
-		
-		
 		JFileChooser file = new JFileChooser();
 		JEditorPane editpane = new JEditorPane();
-		editpane.setFont(new Font ("ComicSans", 0 ,13));
+		editpane.setFont(new Font ("ComicSans", 0 ,14));
 		editpane.setContentType("text/plain");
 		Frame.setContentPane(editpane);
+//		JScrollPane scrollpane = new JScrollPane(editpane);
+//		scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//		scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+//		Frame.getContentPane(editpane).add(scrollpane);
+//		scrollpane.setPreferredSize(new Dimension(scrollpane.getViewport().getWidth(),
+//				scrollpane.getViewport().getHeight()));
 		
 //		Invoking/Calling swing functions
 		Frame.add(Menu);
 		Frame.add(Popup);
-		
 		Menu.add(File);
 		Menu.add(Edit);
 		Menu.add(About);
@@ -77,14 +80,6 @@ public class TextEditorApp {
 		Popup.add(Selectall);
 		
 		
-		editpane.addMouseListener(new MouseAdapter(){
-			public void mouseReleased(MouseEvent e) {
-				if(e.isPopupTrigger()) {
-					Popup.show(e.getComponent(), e.getX(), e.getY());
-				}
-				
-			}
-		});
 //		Invoking Frame Methods
 		Frame.setJMenuBar(Menu);
 		Frame.setSize( 800, 800);
@@ -92,19 +87,12 @@ public class TextEditorApp {
 		Frame.setVisible(true);
 		Frame.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
 		
-//		Invoking Frame Methods 2
-//		prog.setVisible(false);
-//		Frame2.setJMenuBar(Menu);
-//		Frame2.setSize( 500, 300);
-//		Frame2.setLayout(null);
-//		Frame2.setVisible(true);
-//		Frame2.setDefaultCloseOperation(Frame2.HIDE_ON_CLOSE);
-		
+
 //		Defining a Tool tip for the registered MenuItems
 		New.setToolTipText("Start a new text document");
 		Open.setToolTipText("Import a text document");
 		Save.setToolTipText("Save text document to file");
-		Print.setToolTipText("Print texts");
+		Print.setToolTipText("Prints text document with a printer");
 		Save_Close.setToolTipText("Save file and auto close app");
 		
 		Cut.setToolTipText("Remove currently selected text");
@@ -116,6 +104,16 @@ public class TextEditorApp {
 		Pastee.setToolTipText("Paste recently extracted text to file");
 		
 		AboutApp.setToolTipText("Explore About App");
+		
+//		Popup Menu Items function
+		editpane.addMouseListener(new MouseAdapter(){
+			public void mouseReleased(MouseEvent e) {
+				if(e.isPopupTrigger()) {
+					Popup.show(e.getComponent(), e.getX(), e.getY());
+				}
+				
+			}
+		});
 		
 //		Function to close app
 		
@@ -172,15 +170,15 @@ public class TextEditorApp {
 			public void actionPerformed(ActionEvent File) {
 				if(!editpane.getText().isEmpty() ) {
 					try {
-					String saVerr = "Do you want to save changes to a new file?";
+					String saVerr = "Do you want to save changes to a new or existing file?";
 					Object [] optNew = {"Save","Don't save", "Cancel"};
 					int opt = JOptionPane.showOptionDialog(Frame , saVerr,"Open a new text document", 
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, optNew, optNew[1]);
 					if (opt == JOptionPane.YES_OPTION ) {
 						file.setDialogTitle("Save text file");
-						FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
-						file.addChoosableFileFilter(filter);
+						FileNameExtensionFilter filter3 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+						file.getAcceptAllFileFilter();
 						file.setAcceptAllFileFilterUsed(true);
 						int openfile = file.showSaveDialog(Frame);
 						if (openfile == file.APPROVE_OPTION) {
@@ -193,9 +191,9 @@ public class TextEditorApp {
 								String str = editpane.getText();
 								merge.write(str);
 								merge.close();
+								editpane.setText("");
 								Frame.setTitle(selFile.getName()+ " - Text Editor");
 								JOptionPane.showMessageDialog(Frame, selFile+"\nFile successfully saved to directory");
-								editpane.setText("");
 								Frame.setTitle(default_titile + " - Text Editor App");
 								
 							}
@@ -258,9 +256,10 @@ public class TextEditorApp {
 			public void actionPerformed(ActionEvent File) {
 				if(!editpane.getText().isEmpty() ) {
 					file.setDialogTitle("Save text file");
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
-					file.addChoosableFileFilter(filter);
+					FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+					file.getAcceptAllFileFilter();
 					file.setAcceptAllFileFilterUsed(true);
+					
 					int openfile = file.showSaveDialog(Frame);
 					if (openfile == file.APPROVE_OPTION) {
 						try {
@@ -293,17 +292,24 @@ public class TextEditorApp {
 			});
 		Print.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
-				editpane.setBackground(Color.white);
-				boolean show = true;
-					try {
-						editpane.print(null, null,show,null,null,show);
+				if(!editpane.getText().isEmpty() ) {
+					editpane.setBackground(Color.white);
+					boolean show = true;
+						try {
+							editpane.print(null, null,show,null,null,show);
+						}
+						catch(Exception e1){
+							JOptionPane.showMessageDialog(Frame , e1 , 
+									"Print Function Error" ,JOptionPane.WARNING_MESSAGE);
+						}
 					}
-					catch(Exception e1){
-						JOptionPane.showMessageDialog(Frame , e1 , 
-								"Print Function Error" ,JOptionPane.WARNING_MESSAGE);
-					}
+				else {
+					String printErr = "You cannot print an empty file!";
+					JOptionPane.showMessageDialog(Frame , printErr , 
+							"Save File Error" ,JOptionPane.WARNING_MESSAGE);
 				}
-			});
+			}
+		});
 		Save_Close.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
 				if(!editpane.getText().isEmpty() ) {
@@ -315,8 +321,8 @@ public class TextEditorApp {
 							JOptionPane.QUESTION_MESSAGE, null, optNew, optNew[1]);
 					if (opt == JOptionPane.YES_OPTION ) {
 						file.setDialogTitle("Save text file");
-						FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
-						file.addChoosableFileFilter(filter);
+						FileNameExtensionFilter filter2 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+						file.getAcceptAllFileFilter();
 						file.setAcceptAllFileFilterUsed(true);
 						int openfile = file.showSaveDialog(Frame);
 						if (openfile == file.APPROVE_OPTION) {
