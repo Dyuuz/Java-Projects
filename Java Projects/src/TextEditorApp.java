@@ -3,15 +3,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.awt.print.PrinterException;
 import javax.swing.*;
 import java.io.*;
 import java.text.AttributedString;
-import java.util.Random;
-import java.util.Random.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TextEditorApp {
@@ -19,11 +15,12 @@ public class TextEditorApp {
 	public static void main(String[] args) throws PrinterException {
 		
 //		Java swing component initialization and definition
-		JFrame Frame = new JFrame();
+		String default_titile = "*Untitled";
+		String FramTi = default_titile + " - Text Editor App" ;
+		JFrame Frame = new JFrame(FramTi);
 		Image icn = Toolkit.getDefaultToolkit().getImage("logo3.png");
 		Frame.setIconImage(icn);
-		String default_titile = "*Untitled";
-		Frame.setTitle(default_titile + " - Text Editor App");
+		Frame.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
 		JMenuBar Menu = new JMenuBar();
 		Menu.setBounds(0, 0,100,100);
 		JMenu File = new JMenu("File");
@@ -46,19 +43,15 @@ public class TextEditorApp {
 		JMenuItem Selectall = new JMenuItem("SelectAll");
 		JFileChooser file = new JFileChooser();
 		JEditorPane editpane = new JEditorPane();
+		editpane.setEditable(true);
 		editpane.setFont(new Font ("ComicSans", 0 ,14));
 		editpane.setContentType("text/plain");
-		Frame.setContentPane(editpane);
-//		JScrollPane scrollpane = new JScrollPane(editpane);
-//		scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//		Frame.getContentPane(editpane).add(scrollpane);
-//		scrollpane.setPreferredSize(new Dimension(scrollpane.getViewport().getWidth(),
-//				scrollpane.getViewport().getHeight()));
+		JScrollPane scrollpane = new JScrollPane(editpane);
+		scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-//		Invoking/Calling swing functions
-		Frame.add(Menu);
-		Frame.add(Popup);
+//		Defining swing functions
+		Frame.add(scrollpane);
 		Menu.add(File);
 		Menu.add(Edit);
 		Menu.add(About);
@@ -79,14 +72,11 @@ public class TextEditorApp {
 		Popup.addSeparator();
 		Popup.add(Selectall);
 		
-		
-//		Invoking Frame Methods
+//		Defining Frame Methods
 		Frame.setJMenuBar(Menu);
 		Frame.setSize( 800, 800);
-		Frame.setLayout(null);
+		Frame.setLocationRelativeTo(null);
 		Frame.setVisible(true);
-		Frame.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
-		
 
 //		Defining a Tool tip for the registered MenuItems
 		New.setToolTipText("Start a new text document");
@@ -99,13 +89,15 @@ public class TextEditorApp {
 		Copy.setToolTipText("Duplicate currently selected text");
 		Paste.setToolTipText("Paste recently extracted text to file");
 		SelectAll.setToolTipText("Select all text on the page");
+		
+//		Defining a Tool tip for Pop up MenuItems
 		Cutt.setToolTipText("Remove currently selected text");
 		Copyy.setToolTipText("Duplicate currently selected text");
 		Pastee.setToolTipText("Paste recently extracted text to file");
 		
 		AboutApp.setToolTipText("Explore About App");
 		
-//		Popup Menu Items function
+//		Pop up Menu function
 		editpane.addMouseListener(new MouseAdapter(){
 			public void mouseReleased(MouseEvent e) {
 				if(e.isPopupTrigger()) {
@@ -115,10 +107,7 @@ public class TextEditorApp {
 			}
 		});
 		
-//		Function to close app
-		
-		
-//		Defining Pop up menu functionalities
+//		Defining Pop up menu items functionalities
 		Cutt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent edit) {
 			try {
@@ -176,32 +165,66 @@ public class TextEditorApp {
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, optNew, optNew[1]);
 					if (opt == JOptionPane.YES_OPTION ) {
-						file.setDialogTitle("Save text file");
-						FileNameExtensionFilter filter3 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
-						file.getAcceptAllFileFilter();
-						file.setAcceptAllFileFilterUsed(true);
-						int openfile = file.showSaveDialog(Frame);
-						if (openfile == file.APPROVE_OPTION) {
-							try {
-								File selFile = file.getSelectedFile();
-								selFile = new File(selFile + ".txt");
-								selFile.createNewFile();
-								
-								FileWriter merge = new FileWriter(selFile.getAbsolutePath());
-								String str = editpane.getText();
-								merge.write(str);
-								merge.close();
-								editpane.setText("");
-								Frame.setTitle(selFile.getName()+ " - Text Editor");
-								JOptionPane.showMessageDialog(Frame, selFile+"\nFile successfully saved to directory");
-								Frame.setTitle(default_titile + " - Text Editor App");
-								
-							}
-							catch(Exception e1){
-								JOptionPane.showMessageDialog(Frame , e1 , 
-										"Save File Function Error" ,JOptionPane.WARNING_MESSAGE);
-							}
-							}
+						if(!editpane.getText().isEmpty() && Frame.getTitle().equals(FramTi)) {
+							file.setDialogTitle("Save text file");
+							FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+							file.getAcceptAllFileFilter();
+							file.setAcceptAllFileFilterUsed(true);
+							
+							int openfile = file.showSaveDialog(Frame);
+							
+								if (openfile == file.APPROVE_OPTION) {
+								try {
+									File selFile = file.getSelectedFile();
+									selFile = new File(selFile + ".txt");
+									selFile.createNewFile();
+									
+									FileWriter merge = new FileWriter(selFile.getAbsolutePath());
+									String str = editpane.getText();
+									merge.write(str);
+									merge.close();
+									editpane.setText("");
+									Frame.setTitle(selFile.getName()+ " - Text Editor");
+									JOptionPane.showMessageDialog(Frame, selFile+"\nFile successfully saved to directory");
+									
+								}
+								catch(Exception e1){
+									JOptionPane.showMessageDialog(Frame , e1 , 
+											"Save File Function Error" ,JOptionPane.WARNING_MESSAGE);
+								}
+								}
+					}
+						else if (!editpane.getText().isEmpty() && Frame.getTitle() != FramTi ) {
+							file.setDialogTitle("Save text file");
+							FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+							file.getAcceptAllFileFilter();
+							file.setAcceptAllFileFilterUsed(true);
+							
+							int openfile = file.showSaveDialog(Frame);
+							
+								if (openfile == file.APPROVE_OPTION) {
+								try {
+									File selFile = file.getSelectedFile();
+									selFile.createNewFile();
+									
+									FileWriter merge = new FileWriter(selFile.getAbsolutePath());
+									String str = editpane.getText();
+									merge.write(str);
+									merge.close();
+									editpane.setText("");
+									Frame.setTitle(selFile.getName()+ " - Text Editor");
+									JOptionPane.showMessageDialog(Frame, selFile+"\nFile successfully saved to directory");
+									
+								}
+								catch(Exception e1){
+									JOptionPane.showMessageDialog(Frame , e1 , 
+											"Save File Function Error" ,JOptionPane.WARNING_MESSAGE);
+								}
+								}
+						}
+						else {
+							
+						}
 					}
 					else if(opt == JOptionPane.NO_OPTION) {
 						editpane.setText("");
@@ -254,17 +277,46 @@ public class TextEditorApp {
 			});
 		Save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
-				if(!editpane.getText().isEmpty() ) {
+				String FramTi = default_titile + " - Text Editor App" ;
+				if(!editpane.getText().isEmpty() && Frame.getTitle().equals(FramTi)) {
+						file.setDialogTitle("Save text file");
+						FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+						file.getAcceptAllFileFilter();
+						file.setAcceptAllFileFilterUsed(true);
+						
+						int openfile = file.showSaveDialog(Frame);
+						
+							if (openfile == file.APPROVE_OPTION) {
+							try {
+								File selFile = file.getSelectedFile();
+								selFile = new File(selFile + ".txt");
+								selFile.createNewFile();
+								
+								FileWriter merge = new FileWriter(selFile.getAbsolutePath());
+								String str = editpane.getText();
+								merge.write(str);
+								merge.close();
+								Frame.setTitle(selFile.getName()+ " - Text Editor");
+								JOptionPane.showMessageDialog(Frame, selFile+"\nFile successfully saved to directory");
+								
+							}
+							catch(Exception e1){
+								JOptionPane.showMessageDialog(Frame , e1 , 
+										"Save File Function Error" ,JOptionPane.WARNING_MESSAGE);
+							}
+							}
+				}
+				else if (!editpane.getText().isEmpty() && Frame.getTitle() != FramTi ) {
 					file.setDialogTitle("Save text file");
 					FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
 					file.getAcceptAllFileFilter();
 					file.setAcceptAllFileFilterUsed(true);
 					
 					int openfile = file.showSaveDialog(Frame);
-					if (openfile == file.APPROVE_OPTION) {
+					
+						if (openfile == file.APPROVE_OPTION) {
 						try {
 							File selFile = file.getSelectedFile();
-							selFile = new File(selFile + ".txt");
 							selFile.createNewFile();
 							
 							FileWriter merge = new FileWriter(selFile.getAbsolutePath());
@@ -285,10 +337,8 @@ public class TextEditorApp {
 					String saVerr = "You cannot save an empty file!";
 					JOptionPane.showMessageDialog(Frame , saVerr , 
 							"Save File Error" ,JOptionPane.WARNING_MESSAGE);
-				}
-				}
-
-			
+					}
+					}
 			});
 		Print.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent File) {
@@ -320,15 +370,46 @@ public class TextEditorApp {
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, optNew, optNew[1]);
 					if (opt == JOptionPane.YES_OPTION ) {
+						if(!editpane.getText().isEmpty() && Frame.getTitle().equals(FramTi)) {
+							file.setDialogTitle("Save text file");
+							FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+							file.getAcceptAllFileFilter();
+							file.setAcceptAllFileFilterUsed(true);
+							
+							int openfile = file.showSaveDialog(Frame);
+							
+								if (openfile == file.APPROVE_OPTION) {
+								try {
+									File selFile = file.getSelectedFile();
+									selFile = new File(selFile + ".txt");
+									selFile.createNewFile();
+									
+									FileWriter merge = new FileWriter(selFile.getAbsolutePath());
+									String str = editpane.getText();
+									merge.write(str);
+									merge.close();
+									Frame.setTitle(selFile.getName()+ " - Text Editor");
+									JOptionPane.showMessageDialog(Frame, selFile+"\nFile successfully saved to directory");
+									System.exit(0);
+									
+								}
+								catch(Exception e1){
+									JOptionPane.showMessageDialog(Frame , e1 , 
+											"Save File Function Error" ,JOptionPane.WARNING_MESSAGE);
+								}
+								}
+					}
+					else if (!editpane.getText().isEmpty() && Frame.getTitle() != FramTi ) {
 						file.setDialogTitle("Save text file");
-						FileNameExtensionFilter filter2 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
+						FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Text Documents (*.txt)", ".txt");
 						file.getAcceptAllFileFilter();
 						file.setAcceptAllFileFilterUsed(true);
+						
 						int openfile = file.showSaveDialog(Frame);
-						if (openfile == file.APPROVE_OPTION) {
+						
+							if (openfile == file.APPROVE_OPTION) {
 							try {
 								File selFile = file.getSelectedFile();
-								selFile = new File(selFile + ".txt");
 								selFile.createNewFile();
 								
 								FileWriter merge = new FileWriter(selFile.getAbsolutePath());
@@ -337,8 +418,6 @@ public class TextEditorApp {
 								merge.close();
 								Frame.setTitle(selFile.getName()+ " - Text Editor");
 								JOptionPane.showMessageDialog(Frame, selFile+"\nFile successfully saved to directory");
-								editpane.setText("");
-								Frame.setTitle(default_titile + " - Text Editor App");
 								System.exit(0);
 								
 							}
@@ -347,6 +426,7 @@ public class TextEditorApp {
 										"Save File Function Error" ,JOptionPane.WARNING_MESSAGE);
 							}
 							}
+					}
 					}
 					else if(opt == JOptionPane.NO_OPTION) {
 						System.exit(0);
@@ -460,6 +540,5 @@ public class TextEditorApp {
 		});
 		
 	}
-	
 
 }
