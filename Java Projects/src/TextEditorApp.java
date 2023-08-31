@@ -520,10 +520,10 @@ public class TextEditorApp {
 					String AboutAppText = "Text Editor app is a free and minimal app for writing which offers a clean\n"
 							 		   +  "workspace and an open field for creativity. It provides basic features\n"
 							 		   +  "and modifications of existing text files.";
-					Object [] options = {"Send Feedback","Close"};
+					Object [] options = {"Close"};
 					int opt = JOptionPane.showOptionDialog(Frame , AboutApp +"\n"+ version
 							+ "\n" +AboutAppText ,"About App", 
-							JOptionPane.INFORMATION_MESSAGE, 0, scaledIcon, options, options[1]);
+							JOptionPane.INFORMATION_MESSAGE, 0, scaledIcon, options, options[0]);
 					if (opt == JOptionPane.YES_OPTION ) {
 						
 					}
