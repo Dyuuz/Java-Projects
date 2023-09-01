@@ -1,5 +1,5 @@
 # Java-Projects
-This repositiory holds all personal project that i've woked on and the ones that i'm presently working on.
+This repositiory holds all personal projects that i've woked on and the ones that i'm presently working on.
 
 Projects built so far includes:
 
