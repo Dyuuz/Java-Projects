@@ -10,7 +10,7 @@ import java.io.*;
 import java.text.AttributedString;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class TextEditorApp {
+public class TextEditor {
 
 	public static void main(String[] args) throws PrinterException {
 		
@@ -525,7 +525,7 @@ public class TextEditorApp {
 							+ "\n" +AboutAppText ,"About App", 
 							JOptionPane.INFORMATION_MESSAGE, 0, scaledIcon, options, options[0]);
 					if (opt == JOptionPane.YES_OPTION ) {
-						
+						Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					}
 					else{
 						Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
